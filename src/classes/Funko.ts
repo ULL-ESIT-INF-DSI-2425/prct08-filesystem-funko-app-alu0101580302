@@ -5,7 +5,6 @@ import { Genre } from "../enums/Genre.js";
  * Clase Funko. Representa a una figura Funko
  */
 export class Funko {
-    private readonly _id; // ID único del Funko
     private static _idCount = 1; // Cuenta para cada Funko tenga su propio ID
     
     /**
@@ -21,6 +20,7 @@ export class Funko {
      * @param _price - Precio del Funko
      */
     constructor(
+        private readonly _id: number,
         private _name: string, 
         private _description: string, 
         private _type: FunkoTypes, 
@@ -31,7 +31,9 @@ export class Funko {
         private _properties: string,
         private _price: number
     ) {
-        if (_name === "") {
+        if (_id <= 0) {
+            throw new Error("El ID tiene que ser positivo.");
+        } else if (_name === "") {
             throw new Error("El nombre no puede estar vacío.");
         } else if (_description === "") {
             throw new Error("La descripción no puede estar vacía.");
@@ -42,9 +44,13 @@ export class Funko {
         } else if (_price <= 0) {
             throw new Error("El precio tiene que ser positivo.");
         }
+    }
 
-        this._id = Funko._idCount;
-        Funko._idCount++;
+    /**
+     * Getter de id
+     */
+    get id() {
+        return this._id;
     }
 
     /**

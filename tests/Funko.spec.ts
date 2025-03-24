@@ -6,29 +6,37 @@ import { Genre } from "../src/enums/Genre";
 describe("Pruebas de Funko", () => {
     describe("Pruebas del constructor", () => {
         test("", () => {
-            expect(() => new Funko("", "Descripción", FunkoTypes.Pop, Genre.Animation, "Franquicia", 1, false, "", 10)).toThrowError("El nombre no puede estar vacío.");
+            expect(() => new Funko(0, "Nombre", "Descripción", FunkoTypes.Pop, Genre.Animation, "Franquicia", 1, false, "", 10)).toThrowError("El ID tiene que ser positivo.");
+        });
+        
+        test("", () => {
+            expect(() => new Funko(1, "", "Descripción", FunkoTypes.Pop, Genre.Animation, "Franquicia", 1, false, "", 10)).toThrowError("El nombre no puede estar vacío.");
         });
 
         test("", () => {
-            expect(() => new Funko("Nombre", "", FunkoTypes.Pop, Genre.Animation, "Franquicia", 1, false, "", 10)).toThrowError("La descripción no puede estar vacía.");
+            expect(() => new Funko(1, "Nombre", "", FunkoTypes.Pop, Genre.Animation, "Franquicia", 1, false, "", 10)).toThrowError("La descripción no puede estar vacía.");
         });
 
         test("", () => {
-            expect(() => new Funko("Nombre", "Descripción", FunkoTypes.Pop, Genre.Animation, "", 1, false, "", 10)).toThrowError("El Funko debe de pertenecer a alguna franquicia.");
+            expect(() => new Funko(1, "Nombre", "Descripción", FunkoTypes.Pop, Genre.Animation, "", 1, false, "", 10)).toThrowError("El Funko debe de pertenecer a alguna franquicia.");
         });
 
         test("", () => {
-            expect(() => new Funko("Nombre", "Descripción", FunkoTypes.Pop, Genre.Animation, "Franquicia", 0, false, "", 10)).toThrowError("El número del Funko debe de ser positivo.");
+            expect(() => new Funko(1, "Nombre", "Descripción", FunkoTypes.Pop, Genre.Animation, "Franquicia", 0, false, "", 10)).toThrowError("El número del Funko debe de ser positivo.");
         });
 
         test("", () => {
-            expect(() => new Funko("Nombre", "Descripción", FunkoTypes.Pop, Genre.Animation, "Franquicia", 1, false, "", 0)).toThrowError("El precio tiene que ser positivo.");
+            expect(() => new Funko(1, "Nombre", "Descripción", FunkoTypes.Pop, Genre.Animation, "Franquicia", 1, false, "", 0)).toThrowError("El precio tiene que ser positivo.");
         });
     });
 
-    const funko: Funko = new Funko("Sonic", "Figura de Sonic", FunkoTypes.Pop, Genre.Videogames, "Sonic The Hedgehog", 1, false, "", 10);
+    const funko: Funko = new Funko(1, "Sonic", "Figura de Sonic", FunkoTypes.Pop, Genre.Videogames, "Sonic The Hedgehog", 1, false, "", 10);
 
     describe("Pruebas de los getter", () => {
+        test("", () => {
+            expect(funko.id).toStrictEqual(1);
+        });
+        
         test("", () => {
             expect(funko.name).toStrictEqual("Sonic");
         });
