@@ -1,5 +1,7 @@
-import  fs from "fs";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import fs from "fs";
 import yargs from "yargs";
+import chalk from "chalk";
 import { hideBin } from 'yargs/helpers';
 import { FunkoTypes } from "./enums/FunkoTypes.js";
 import { Genre } from "./enums/Genre.js";
@@ -69,11 +71,11 @@ yargs(hideBin(process.argv))
 
             fs.mkdir(`src/users/${argv.user}`, { recursive: true }, (err) => {
                 if (err) { 
-                    console.log(err);
+                    console.log(chalk.red(err));
                 } else {
                     fs.open(`src/users/${argv.user}/funkos.json`, (err) => {
                         if (err) {
-                            console.log(err);
+                            console.log(chalk.red(err));
                         }
                     });
                     
@@ -85,7 +87,7 @@ yargs(hideBin(process.argv))
                                 funkos = JSON.parse(data);
                                 if (!Array.isArray(funkos)) funkos = [];
                             } catch (parseError) {
-                                console.error("Error al leer el JSON:", parseError);
+                                console.error(chalk.red("Error al leer el JSON:", parseError));
                                 funkos = [];
                             }
                         }
@@ -93,7 +95,7 @@ yargs(hideBin(process.argv))
                         const idExists = funkos.some((funk) => funk._id === argv.id);
                 
                         if (idExists) {
-                            console.log(`Ya existe un Funko con el ID ${argv.id} en la colección de ${argv.user}.`);
+                            console.log(chalk.red(`Ya existe un Funko con el ID ${argv.id} en la colección de ${argv.user}.`));
                             return;
                         }
                 
@@ -101,16 +103,16 @@ yargs(hideBin(process.argv))
                 
                         fs.writeFile(`src/users/${argv.user}/funkos.json`, JSON.stringify(funkos, null, 2), 'utf8', (writeErr) => {
                             if (writeErr) {
-                                console.error("Error al escribir en el archivo:", writeErr);
+                                console.error(chalk.red("Error al escribir en el archivo:", writeErr));
                             } else {
-                                console.log(`¡Nuevo Funko añadido a la colección de ${argv.user}!`);
+                                console.log(chalk.green(`¡Nuevo Funko añadido a la colección de ${argv.user}!`));
                             }
                         });
                     });
                 }
             });
         } catch {
-            console.error("El Funko introducido no es correcto.");
+            console.log(chalk.red("El Funko introducido no es correcto."));
             return;
         }
     })
@@ -179,11 +181,11 @@ yargs(hideBin(process.argv))
         try {
             fs.mkdir(`src/users/${argv.user}`, { recursive: true }, (err) => {
                 if (err) { 
-                    console.log(err);
+                    console.log(chalk.red(err));
                 } else {
                     fs.open(`src/users/${argv.user}/funkos.json`, (err) => {
                         if (err) {
-                            console.log(err);
+                            console.log(chalk.red(err));
                         }
                     });
                     
@@ -195,7 +197,7 @@ yargs(hideBin(process.argv))
                                 funkos = JSON.parse(data);
                                 if (!Array.isArray(funkos)) funkos = [];
                             } catch (parseError) {
-                                console.error("Error al leer el JSON:", parseError);
+                                console.error(chalk.red("Error al leer el JSON:", parseError));
                                 funkos = [];
                             }
                         }
@@ -203,7 +205,7 @@ yargs(hideBin(process.argv))
                         const index = funkos.findIndex((funk) => funk._id === argv.id);
                 
                         if (index === -1) {
-                            console.log(`No existe un Funko con el ID ${argv.id} en la colección de ${argv.user}.`);
+                            console.log(chalk.red(`No existe un Funko con el ID ${argv.id} en la colección de ${argv.user}.`));
                             return;
                         } else {
                             if (argv.name) {
@@ -266,17 +268,17 @@ yargs(hideBin(process.argv))
 
                             fs.writeFile(`src/users/${argv.user}/funkos.json`, JSON.stringify(funkos, null, 2), 'utf8', (writeErr) => {
                                 if (writeErr) {
-                                    console.error("Error al escribir en el archivo:", writeErr);
+                                    console.error(chalk.red("Error al escribir en el archivo:", writeErr));
                                 } else {
-                                    console.log(`¡Modificado el Funko de id ${argv.id} a la colección de ${argv.user}!`);
+                                    console.log(chalk.green(`¡Modificado el Funko de id ${argv.id} a la colección de ${argv.user}!`));
                                 }
                             });
                         }
                     });
                 }
             });
-        } catch {
-            console.error("El Funko introducido no es correcto.");
+        } catch (error) {
+            console.log(chalk.red(error));
             return;
         }
     })
@@ -297,14 +299,13 @@ yargs(hideBin(process.argv))
             demandOption: true
         }
     }, (argv) => {
-        try {
             fs.mkdir(`src/users/${argv.user}`, { recursive: true }, (err) => {
                 if (err) { 
-                    console.log(err);
+                    console.log(chalk.red(err));
                 } else {
                     fs.open(`src/users/${argv.user}/funkos.json`, (err) => {
                         if (err) {
-                            console.log(err);
+                            console.log(chalk.red(err));
                         }
                     });
                     
@@ -316,7 +317,7 @@ yargs(hideBin(process.argv))
                                 funkos = JSON.parse(data);
                                 if (!Array.isArray(funkos)) funkos = [];
                             } catch (parseError) {
-                                console.error("Error al leer el JSON:", parseError);
+                                console.error(chalk.red("Error al leer el JSON:", parseError));
                                 funkos = [];
                             }
                         }
@@ -324,26 +325,22 @@ yargs(hideBin(process.argv))
                         const index = funkos.findIndex((funk) => funk._id === argv.id);
                 
                         if (index === -1) {
-                            console.log(`No existe un Funko con el ID ${argv.id} en la colección de ${argv.user}.`);
+                            console.log(chalk.red(`No existe un Funko con el ID ${argv.id} en la colección de ${argv.user}.`));
                             return;
                         } else {
                             funkos.splice(index, 1);
 
                             fs.writeFile(`src/users/${argv.user}/funkos.json`, JSON.stringify(funkos, null, 2), 'utf8', (writeErr) => {
                                 if (writeErr) {
-                                    console.error("Error al escribir en el archivo:", writeErr);
+                                    console.error(chalk.red("Error al escribir en el archivo:", writeErr));
                                 } else {
-                                    console.log(`¡Eliminado el Funko de ID ${argv.id} de la colección de ${argv.user}!`);
+                                    console.log(chalk.green(`¡Eliminado el Funko de ID ${argv.id} de la colección de ${argv.user}!`));
                                 }
                             });
                         }
                     });
                 }
             });
-        } catch {
-            console.error("El Funko introducido no es correcto.");
-            return;
-        }
     })
     .help()
     .argv;
@@ -357,14 +354,13 @@ yargs(hideBin(process.argv))
             demandOption: true
         }
     }, (argv) => {
-        try {
             fs.mkdir(`src/users/${argv.user}`, { recursive: true }, (err) => {
                 if (err) { 
-                    console.log(err);
+                    console.log(chalk.red(err));
                 } else {
                     fs.open(`src/users/${argv.user}/funkos.json`, (err) => {
                         if (err) {
-                            console.log(err);
+                            console.log(chalk.red(err));
                         }
                     });
                     
@@ -376,32 +372,18 @@ yargs(hideBin(process.argv))
                                 funkos = JSON.parse(data);
                                 if (!Array.isArray(funkos)) funkos = [];
                             } catch (parseError) {
-                                console.error("Error al leer el JSON:", parseError);
+                                console.error(chalk.red("Error al leer el JSON:", parseError));
                                 funkos = [];
                             }
                         }
                             
-                        console.log("-------------------------------------------------------");
+                        console.log(chalk.green("-------------------------------------------------------"));
                         funkos.forEach((funko) => {
-                            console.log("ID: " + funko._id);
-                            console.log("Nombre: " + funko._name);
-                            console.log("Descripción: " + funko._description);
-                            console.log("Tipo: " + funko._type);
-                            console.log("Género: " + funko._genre);
-                            console.log("Franquicia: " + funko._franchise);
-                            console.log("Número: " + funko._number);
-                            console.log("Exclusividad: " + funko._exclusive);
-                            console.log("Características: " + funko._properties);
-                            console.log("Precio: " + funko._price);
-                            console.log("-------------------------------------------------------");
+                            printFunkos(funko);
                         })
                     });
                 }
             });
-        } catch {
-            console.error("El Funko introducido no es correcto.");
-            return;
-        }
     })
     .help()
     .argv;
@@ -420,14 +402,13 @@ yargs(hideBin(process.argv))
             demandOption: true
         }
     }, (argv) => {
-        try {
             fs.mkdir(`src/users/${argv.user}`, { recursive: true }, (err) => {
                 if (err) { 
-                    console.log(err);
+                    console.log(chalk.red(err));
                 } else {
                     fs.open(`src/users/${argv.user}/funkos.json`, (err) => {
                         if (err) {
-                            console.log(err);
+                            console.log(chalk.red(err));
                         }
                     });
                     
@@ -439,37 +420,46 @@ yargs(hideBin(process.argv))
                                 funkos = JSON.parse(data);
                                 if (!Array.isArray(funkos)) funkos = [];
                             } catch (parseError) {
-                                console.error("Error al leer el JSON:", parseError);
+                                console.error(chalk.red("Error al leer el JSON:", parseError));
                                 funkos = [];
                             }
                         }
 
-                        const index = funkos.findIndex((funk) => funk._id === argv.id);
+                        {const index = funkos.findIndex((funk) => funk._id === argv.id);
                 
-                        if (index === -1) {
-                            console.log(`No existe un Funko con el ID ${argv.id} en la colección de ${argv.user}.`);
-                            return;
-                        } else {
-                            console.log("-------------------------------------------------------");
-                            console.log("ID: " + funkos[index]._id);
-                            console.log("Nombre: " + funkos[index]._name);
-                            console.log("Descripción: " + funkos[index]._description);
-                            console.log("Tipo: " + funkos[index]._type);
-                            console.log("Género: " + funkos[index]._genre);
-                            console.log("Franquicia: " + funkos[index]._franchise);
-                            console.log("Número: " + funkos[index]._number);
-                            console.log("Exclusividad: " + funkos[index]._exclusive);
-                            console.log("Características: " + funkos[index]._properties);
-                            console.log("Precio: " + funkos[index]._price);
-                            console.log("-------------------------------------------------------");
+                            if (index === -1) {
+                                console.log(chalk.red(`No existe un Funko con el ID ${argv.id} en la colección de ${argv.user}.`));
+                                return;
+                            } else {
+                                console.log(chalk.green("-------------------------------------------------------"));
+                                printFunkos(funkos[index]);
+                            }
                         }
                     });
                 }
             });
-        } catch {
-            console.error("El Funko introducido no es correcto.");
-            return;
-        }
+        
     })
     .help()
     .argv;
+
+/**
+ * Imprime la información de un Funko
+ * @param funko - Funko a imprimir
+ * @returns La información del Funko
+ */
+function printFunkos(funko: any): void {
+    let rslt: string = `ID: ${funko._id}\n`;
+    rslt += `Nombre: ${funko._name}\n`;
+    rslt += `Descripción: ${funko._description}\n`;
+    rslt += `Tipo: ${funko._type}\n`;
+    rslt += `Género: ${funko._genre}\n`;
+    rslt += `Franquicia: ${funko._franchise}\n`;
+    rslt += `Número: ${funko._number}\n`;
+    rslt += `Exclusividad: ${funko._exclusive}\n`;
+    rslt += `Características: ${funko._properties}\n`;
+    rslt += `Precio: ${funko._price}\n`;
+    rslt += '-------------------------------------------------------\n';
+
+    console.log(chalk.green(rslt));
+}
